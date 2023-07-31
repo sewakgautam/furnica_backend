@@ -27,8 +27,8 @@ export class ProductService {
 
   async create(createProductDto: CreateProductDto, userId: string) {
     // const category = categoryId ? { id: categoryId } : undefined;
-    console.log(createProductDto.category);
-    const categories = createProductDto?.category?.split(',');
+    console.log(createProductDto);
+    const categories = Object.keys(createProductDto.category);
     const categoriesData = [];
     if (!categories) {
       throw new BadRequestException('Cannot Add product without category');
@@ -57,9 +57,8 @@ export class ProductService {
   async findAll() {
     const findAll = await this.productRepository.findAndCount();
     if (!findAll) throw new BadRequestException('No products found');
-    {
-      return findAll;
-    }
+
+    return findAll;
   }
 
   async findOne(id: string) {

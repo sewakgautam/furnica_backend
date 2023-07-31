@@ -17,8 +17,6 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @ApiTags('product')
 @Controller('product')
-@UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
@@ -33,10 +31,13 @@ export class ProductController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async create(
     @Body() createProductDto: CreateProductDto,
     @GetUser('userId') userId: string,
   ) {
+    console.log(createProductDto);
     return this.productService.create(createProductDto, userId);
   }
 
@@ -46,11 +47,15 @@ export class ProductController {
   // }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.productService.remove(id);
   }
 
   @Post('buy/:productId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   Buy(
     @Param('productId') productId: string,
     @GetUser('userId') userId: string,

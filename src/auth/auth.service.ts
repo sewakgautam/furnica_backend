@@ -50,7 +50,6 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     console.log(loginDto);
     const user = await this.validateUser(loginDto.email, loginDto.password);
-    console.log(user);
     if (!user) {
       throw new Error('Invalid email or password.');
     }
@@ -59,15 +58,14 @@ export class AuthService {
     const playLoad = {
       email: user.email,
       userId: user.id,
+      role: user.role,
     };
-    console.log(playLoad);
-
     const token = this.jwtService.sign(playLoad, {
       expiresIn: '2d',
       secret: 'secretKey',
     });
     console.log(token);
-    return { accessToken: token };
+    return { accessToken: token, role: user.role };
   }
 
   async verifyEmail(email: string, code: string) {
